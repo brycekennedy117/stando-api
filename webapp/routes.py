@@ -7,11 +7,21 @@ standParams = Stand.getAttributesAsList()
 userParams = User.getAttributesAsList()
 
 def parseParams(expectedParamList):
-    params = []
     if not request:
         return None
+    # json requests are necessary to handle array parameters
+    if request.json:
+        return parseJSON(expectedParamList)
+    elif request.form:
+        return parseForm(expectedParamList)
+
+    return None
+
+def parseForm(expectedParamList):
+    params = []
 
     for param in request.form:
+        print(param)
         if param not in expectedParamList:
             return None
 
@@ -22,7 +32,28 @@ def parseParams(expectedParamList):
 
     return params
 
+def parseJSON(expectedParamList):
+    params = []
+
+    for param in request.json:
+        print(param)
+        if param not in expectedParamList:
+            return None
+
+    for param in expectedParamList:
+        if not request.json[param]:
+            return None
+        params.append(request.json[param])
+
+    return params
+
 def parseOptionalParams(potentialParamList):
+    if request.json:
+        return parseOptionalJSON(potentialParamList)
+    elif request.form:
+        return parseOptionalForm(potentialParamList)
+
+def parseOptionalForm(potentialParamList):
     fieldsToUpdate = []
     params = []
 
@@ -32,6 +63,19 @@ def parseOptionalParams(potentialParamList):
             fieldsToUpdate.append(param)
             params.append(request.form[param])
 
+    # return which fields should be changed and the new values for said fields
+    return dict(zip(fieldsToUpdate, params))
+
+def parseOptionalJSON(potentialParamList):
+    fieldsToUpdate = []
+    params = []
+
+    # if a param that is allowed is in the request then it will marked as a field to update for the request
+    for param in potentialParamList:
+        if request.json.get(param):
+            fieldsToUpdate.append(param)
+            params.append(request.json[param])
+            
     # return which fields should be changed and the new values for said fields
     return dict(zip(fieldsToUpdate, params))
 

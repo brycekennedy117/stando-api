@@ -24,8 +24,6 @@ class UserController:
             user.lastName = params['lastName']
         if params.get('age'):
             user.age = params['age']
-        if params.get('stands'):
-            user.stands = params['stands']
         db.session.commit()
         return user
 

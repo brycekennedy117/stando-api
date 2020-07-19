@@ -1,4 +1,5 @@
 from webapp import db
+from sqlalchemy_utils import ScalarListType
 
 class Stand(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -10,10 +11,14 @@ class Stand(db.Model):
     precision = db.Column(db.String(1))
     developmentPotential = db.Column(db.String(1))
     kind = db.Column(db.String(100), nullable=False)
+    classification = db.Column(db.String(100), nullable=False)
+    sentient = db.Column(db.Boolean())
+    abilities = db.Column(ScalarListType(str))
 
     @staticmethod
     def getAttributesAsList():
-        return ['id', 'name', 'destructivePower', 'speed', 'range', 'persistence', 'precision', 'developmentPotential', 'kind']
+        return ['id', 'name', 'destructivePower', 'speed', 'range', 'persistence', 'precision', \
+            'developmentPotential', 'kind', 'classification', 'sentient', 'abilities']
 
     def asDict(self):
         return {
@@ -25,7 +30,10 @@ class Stand(db.Model):
             'persistence': self.persistence,
             'precision': self.precision,
             'developmentPotential': self.developmentPotential,
-            'kind': self.kind
+            'kind': self.kind,
+            'classification': self.classification,
+            'sentient': self.sentient,
+            'abilities': self.abilities
         }
 
 
