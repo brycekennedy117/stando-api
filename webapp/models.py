@@ -12,7 +12,7 @@ class Stand(db.Model):
     developmentPotential = db.Column(db.String(1))
     kind = db.Column(db.String(100), nullable=False)
     classification = db.Column(db.String(100), nullable=False)
-    sentient = db.Column(db.Boolean())
+    sentient = db.Column(db.Boolean(), default=False, nullable=False)
     abilities = db.Column(ScalarListType(str))
 
     @staticmethod
@@ -24,18 +24,19 @@ class Stand(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'destructivePower': self.destructivePower,
-            'speed': self.speed,
-            'range': self.range,
-            'persistence': self.persistence,
-            'precision': self.precision,
-            'developmentPotential': self.developmentPotential,
+            'parameters': {
+                'destructivePower': self.destructivePower,
+                'speed': self.speed,
+                'range': self.range,
+                'persistence': self.persistence,
+                'precision': self.precision,
+                'developmentPotential': self.developmentPotential
+            },
             'kind': self.kind,
             'classification': self.classification,
             'sentient': self.sentient,
             'abilities': self.abilities
         }
-
 
 class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

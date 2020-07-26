@@ -12,7 +12,8 @@ class StandController:
 
     def createStand(self, params):
         newStand = Stand(id=params[0], name=params[1], destructivePower=params[2], speed=params[3], range=params[4], \
-            persistence=params[5], precision=params[6], developmentPotential=params[7], kind=params[8], abilities=params[9])
+            persistence=params[5], precision=params[6], developmentPotential=params[7], kind=params[8], classification=params[9], \
+            sentient=params[10], abilities=params[11])
         db.session.add(newStand)
         db.session.commit()
         return newStand
@@ -35,6 +36,10 @@ class StandController:
             stand.developmentPotential = params['developmentPotential']
         if params.get('kind'):
             stand.kind = params['kind']
+        if params.get('classification'):
+            stand.classification = params['classification']
+        if params.get('sentient'):
+            stand.sentient = params['sentient']
         if params.get('abilities'):
             stand.abilities = params['abilities']
         db.session.commit()

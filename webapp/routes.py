@@ -21,7 +21,6 @@ def parseForm(expectedParamList):
     params = []
 
     for param in request.form:
-        print(param)
         if param not in expectedParamList:
             return None
 
@@ -34,17 +33,14 @@ def parseForm(expectedParamList):
 
 def parseJSON(expectedParamList):
     params = []
-
     for param in request.json:
-        print(param)
         if param not in expectedParamList:
             return None
 
     for param in expectedParamList:
-        if not request.json[param]:
+        if request.json[param] is None:
             return None
         params.append(request.json[param])
-
     return params
 
 def parseOptionalParams(potentialParamList):
@@ -75,7 +71,7 @@ def parseOptionalJSON(potentialParamList):
         if request.json.get(param):
             fieldsToUpdate.append(param)
             params.append(request.json[param])
-            
+
     # return which fields should be changed and the new values for said fields
     return dict(zip(fieldsToUpdate, params))
 
